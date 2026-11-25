@@ -53,6 +53,8 @@ def _fetch_history(days: int = 7) -> list:
         try:
             ts_str = r.get("created_at", "")
             ts = datetime.fromisoformat(ts_str.replace("Z", "+00:00"))
+            if ts.tzinfo is None:
+                ts = ts.replace(tzinfo=timezone.utc)
             if ts >= cutoff:
                 filtered.append(_parse_result(r))
         except (ValueError, AttributeError):
