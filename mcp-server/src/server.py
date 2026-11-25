@@ -79,8 +79,8 @@ def run_speedtest() -> dict:
     """Trigger a manual speedtest and return the result when complete (may take 30-60s)."""
     with httpx.Client(timeout=30) as client:
         resp = client.post(
-            f"{SPEEDTEST_BASE_URL}/api/v1/speedtests",
-            headers=_get_headers(),
+            f"{SPEEDTEST_BASE_URL}/api/v1/speedtests/run",
+            headers={**_get_headers(), "Accept": "application/json"},
         )
         resp.raise_for_status()
     for _ in range(12):
