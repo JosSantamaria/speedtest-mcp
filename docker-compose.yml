@@ -1,0 +1,44 @@
+version: "3.8"
+
+services:
+  speedtest:
+    image: ghcr.io/alexjustesen/speedtest-tracker:latest
+    pull_policy: always
+    container_name: speedtest-tracker
+    environment:
+      - APP_KEY=${APP_KEY}
+      - DB_CONNECTION=sqlite
+      - DISPLAY_TIMEZONE=${TZ:-America/Merida}
+      - APP_URL=http://10.0.2.3:${UI_PORT:-8083}
+      - SPEEDTEST_SCHEDULE=${SPEEDTEST_SCHEDULE:-0 * * * *}
+    volumes:
+      - speedtest_data:/config
+    ports:
+      - "${UI_PORT:-8083}:80"
+    networks:
+      - backend
+    restart: unless-stopped
+
+  mcp-server:
+    image: mcp-speedtest-local:latest
+    pull_policy: never
+    container_name: mcp-speedtest
+    environment:
+      - SPEEDTEST_API_KEY=${SPEEDTEST_API_KEY:-}
+      - SPEEDTEST_BASE_URL=http://speedtest:80
+      - TZ=${TZ:-America/Merida}
+    ports:
+      - "${MCP_PORT:-3100}:3100"
+    networks:
+      - backend
+    depends_on:
+      - speedtest
+    restart: unless-stopped
+
+networks:
+  backend:
+    driver: bridge
+
+volumes:
+  speedtest_data:
+    driver: local

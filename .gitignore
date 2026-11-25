@@ -1,0 +1,28 @@
+# Variables de entorno (contienen secretos)
+.env
+
+# Datos runtime de speedtest-tracker
+speedtest-tracker/data/
+speedtest-tracker/*.db
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+.Python
+*.egg-info/
+dist/
+build/
+
+# Sistema operativo
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+
+# Artefactos de agentes
+.agents/
+
+# Workflow artifacts
+.agents/
