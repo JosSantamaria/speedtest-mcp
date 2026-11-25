@@ -2,15 +2,17 @@ version: "3.8"
 
 services:
   speedtest:
-    image: ghcr.io/alexjustesen/speedtest-tracker:latest
+    image: lscr.io/linuxserver/speedtest-tracker:latest
     pull_policy: always
     container_name: speedtest-tracker
     environment:
+      - PUID=1000
+      - PGID=1000
       - APP_KEY=${APP_KEY}
       - DB_CONNECTION=sqlite
-      - DISPLAY_TIMEZONE=${TZ:-America/Merida}
       - APP_URL=http://10.0.2.3:${UI_PORT:-8083}
-      - SPEEDTEST_SCHEDULE=${SPEEDTEST_SCHEDULE:-0 * * * *}
+      - SPEEDTEST_SCHEDULE=${SPEEDTEST_SCHEDULE:-0 4,16 * * *}
+      - DISPLAY_TIMEZONE=${TZ:-America/Merida}
     volumes:
       - speedtest_data:/config
     ports:
